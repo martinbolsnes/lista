@@ -2,8 +2,8 @@ import Auth from './components/Auth';
 import { getUserIdFromToken } from '@/lib/auth';
 import Dashboard from './components/Dashboard';
 
-export default async function Home({ request }: { request: Request }) {
-  const userId = await getUserIdFromToken(request);
+export default function Home({ request }: { request: Request }) {
+  const userId = getUserIdFromToken(request);
 
   if (!userId) {
     return (
