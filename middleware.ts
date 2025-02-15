@@ -5,7 +5,7 @@ import { getUserIdFromToken } from './lib/auth';
 export async function middleware(request: NextRequest) {
   const userId = await getUserIdFromToken(request);
 
-  const protectedRoutes = ['/dashboard', '/list/'];
+  const protectedRoutes = ['/dashboard', '/list/[id]'];
 
   if (!userId && protectedRoutes.includes(request.nextUrl.pathname)) {
     return NextResponse.redirect(new URL('/', request.url));
@@ -15,5 +15,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard', '/list/'],
+  matcher: ['/dashboard', '/list/[id]'],
 };
