@@ -16,6 +16,7 @@ interface Item {
 }
 
 interface List {
+  _id: string;
   name: string;
 }
 
