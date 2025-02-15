@@ -8,6 +8,8 @@ if (!process.env.JWT_SECRET) {
 export async function getUserIdFromToken(
   request: Request
 ): Promise<string | null> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _ = request; // ✅ Ignore request without removing it
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value;
 

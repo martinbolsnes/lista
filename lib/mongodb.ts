@@ -11,6 +11,7 @@ let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
