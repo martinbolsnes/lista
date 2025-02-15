@@ -48,6 +48,7 @@ export default function Dashboard() {
       setLists(data);
     } catch (error) {
       toast({ title: 'Feil', description: 'Klarte ikke hente listene' });
+      throw new Error(`${error}`);
     } finally {
       setLoadingLists(false);
     }
@@ -70,6 +71,7 @@ export default function Dashboard() {
       fetchLists();
     } catch (error) {
       toast({ title: 'Feil', description: 'Klarte ikke opprette listen' });
+      throw new Error(`${error}`);
     } finally {
       setCreatingList(false);
     }
@@ -96,6 +98,7 @@ export default function Dashboard() {
       toast({ title: 'Slettet', description: 'Listen ble slettet' });
     } catch (error) {
       toast({ title: 'Feil', description: 'Klarte ikke slette listen' });
+      throw new Error(`${error}`);
     } finally {
       setDialogOpen(false);
       setSelectedList(null);
