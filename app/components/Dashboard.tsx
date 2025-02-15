@@ -10,8 +10,13 @@ import { Plus } from 'lucide-react';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingSpinner } from './LoadingSpinner';
 
+interface List {
+  _id: string;
+  name: string;
+}
+
 export default function Dashboard() {
-  const [lists, setLists] = useState([]);
+  const [lists, setLists] = useState<List[]>([]);
   const [newListName, setNewListName] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -74,7 +79,7 @@ export default function Dashboard() {
         </Button>
       </form>
       <div className='flex flex-col space-y-4'>
-        {lists.map((list: any) => (
+        {lists.map((list) => (
           <Link href={`/list/${list._id}`} key={list._id}>
             <Card>
               <CardHeader>
