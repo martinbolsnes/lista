@@ -1,8 +1,9 @@
 import Auth from './components/Auth';
 import { getUserIdFromToken } from '@/lib/auth';
 import Dashboard from './components/Dashboard';
+import { NextRequest } from 'next/server';
 
-export default function Home({ request }: { request: Request }) {
+export default function Home(request: NextRequest) {
   const userId = getUserIdFromToken(request);
 
   if (!userId) {
