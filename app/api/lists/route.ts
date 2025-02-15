@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';
-import { getUserIdFromToken } from '@/lib/auth';
+import { auth } from '@clerk/nextjs/server';
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = await getUserIdFromToken(request);
+    const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { pathname } = request.nextUrl;
+    const listId = pathname.split('/').pop(); // Extract listId from URL
+
+    if (!listId) {
+      return NextResponse.json(
+        { error: 'List ID is required' },
+        { status: 400 }
+      );
     }
 
     const client = await clientPromise;
@@ -15,7 +24,7 @@ export async function GET(request: NextRequest) {
 
     const lists = await db
       .collection('lists')
-      .find({ ownerId: new ObjectId(userId) })
+      .find({ ownerId: userId })
       .toArray();
 
     return NextResponse.json(lists);
@@ -30,7 +39,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const userId = await getUserIdFromToken(request);
+    const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -41,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     const result = await db.collection('lists').insertOne({
       name,
-      ownerId: new ObjectId(userId),
+      ownerId: userId,
       createdAt: new Date(),
     });
 
