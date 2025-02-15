@@ -7,6 +7,7 @@ import {
 import './globals.css';
 import Header from './components/Header';
 import { Toaster } from '@/components/ui/toaster';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const shrikhand = Shrikhand({
   weight: '400',
@@ -36,14 +37,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body
-        className={`${shrikhand.variable} ${cabin.variable} ${fira.variable} antialiased`}
-      >
-        <Header />
-        {children}
-        <Toaster />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang='en'>
+        <body
+          className={`${shrikhand.variable} ${cabin.variable} ${fira.variable} antialiased`}
+        >
+          <Header />
+          {children}
+          <Toaster />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
