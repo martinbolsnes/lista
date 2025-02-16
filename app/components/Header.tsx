@@ -11,8 +11,10 @@ import {
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
+import { currentUser } from '@clerk/nextjs/server';
 
 export default async function Header() {
+  const user = await currentUser();
   return (
     <div className='bg-primary border-b border-border px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-10'>
       <Link href='/'>
@@ -51,20 +53,34 @@ export default async function Header() {
               <SheetDescription className='hidden'>LISTA</SheetDescription>
             </SheetHeader>
             <div className={cn('flex flex-col items-end gap-4 py-6 text-lg')}>
-              <SheetTrigger asChild>
-                <Link href='/'>
-                  <Button variant='ghost' className='font-semibold'>
-                    Hjem
-                  </Button>
-                </Link>
-              </SheetTrigger>
-              <SheetTrigger asChild>
-                <Link href='/lists'>
-                  <Button variant='ghost' className='font-semibold'>
-                    Dine lister
-                  </Button>
-                </Link>
-              </SheetTrigger>
+              {!user ? (
+                <>
+                  <SheetTrigger asChild>
+                    <SignInButton>
+                      <Button variant='ghost' className='font-semibold'>
+                        Logg inn
+                      </Button>
+                    </SignInButton>
+                  </SheetTrigger>
+                </>
+              ) : (
+                <>
+                  <SheetTrigger asChild>
+                    <Link href='/'>
+                      <Button variant='ghost' className='font-semibold'>
+                        Hjem
+                      </Button>
+                    </Link>
+                  </SheetTrigger>
+                  <SheetTrigger asChild>
+                    <Link href='/dashboard'>
+                      <Button variant='ghost' className='font-semibold'>
+                        Dine lister
+                      </Button>
+                    </Link>
+                  </SheetTrigger>
+                </>
+              )}
             </div>
           </SheetContent>
         </Sheet>
