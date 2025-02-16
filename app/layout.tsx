@@ -1,9 +1,5 @@
 import type { Metadata } from 'next';
-import {
-  Shrikhand,
-  Cabin_Condensed,
-  Fira_Sans_Condensed,
-} from 'next/font/google';
+import { Shrikhand, Fira_Sans_Condensed } from 'next/font/google';
 import './globals.css';
 import Header from './components/Header';
 import { Toaster } from '@/components/ui/toaster';
@@ -13,11 +9,6 @@ const shrikhand = Shrikhand({
   weight: '400',
   subsets: ['latin'],
   variable: '--font-shrikhand',
-});
-const cabin = Cabin_Condensed({
-  weight: '500',
-  subsets: ['latin'],
-  variable: '--font-cabin',
 });
 
 const fira = Fira_Sans_Condensed({
@@ -39,9 +30,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang='en'>
-        <body
-          className={`${shrikhand.variable} ${cabin.variable} ${fira.variable} antialiased`}
-        >
+        <body className={`${shrikhand.variable} ${fira.variable} antialiased`}>
           <Header />
           {children}
           <Toaster />
