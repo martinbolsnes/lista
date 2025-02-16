@@ -1,12 +1,40 @@
+'use client';
+
 import Dashboard from './components/Dashboard';
-import { SignInButton } from '@clerk/nextjs';
-import { currentUser } from '@clerk/nextjs/server';
+import { SignInButton, useUser } from '@clerk/nextjs';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { FileText, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
 
-export default async function Home() {
-  const user = await currentUser();
+export default function Home() {
+  const { isSignedIn, isLoaded, user } = useUser();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      const saveUserToDatabase = async () => {
+        try {
+          const response = await fetch('/api/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              clerkId: user.id,
+              email: user.emailAddresses[0],
+              name: user.fullName,
+            }),
+          });
+
+          if (!response.ok) {
+            console.error('Error saving user data to the database.');
+          }
+        } catch (error) {
+          console.error('Failed to save user:', error);
+        }
+      };
+
+      saveUserToDatabase();
+    }
+  }, [isLoaded, isSignedIn, user]);
 
   if (!user) {
     return (
@@ -21,7 +49,7 @@ export default async function Home() {
               <FileText className='mr-2' />
               Flere lister på en plass
             </CardTitle>
-            <CardContent className='font-serif'>
+            <CardContent className='font-sans'>
               Lag flere lister for forskjellige gjøremål og ha de enkelt samlet
               i en og samme app
             </CardContent>
@@ -31,7 +59,7 @@ export default async function Home() {
               <Users className='mr-2' />
               Del listene dine
             </CardTitle>
-            <CardContent className='font-serif'>
+            <CardContent className='font-sans'>
               Inviter andre brukere til å bruke listene dine og ha full kontroll
               på alle punkt
             </CardContent>
