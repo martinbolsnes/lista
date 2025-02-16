@@ -21,19 +21,53 @@ export async function GET(
     const client = await clientPromise;
     const db = client.db('lista-app');
 
-    const list = await db.collection('lists').findOne({
+    // Step 1: Try to fetch the list from the owned lists collection
+    const ownedList = await db.collection('lists').findOne({
       _id: new ObjectId(listId),
-      $or: [{ ownerId: userId }, { 'permissions.userId': userId }],
+      ownerId: userId,
     });
 
-    if (!list) {
-      return NextResponse.json(
-        { error: 'List not found or access denied' },
-        { status: 404 }
-      );
+    // Step 2: If the list is not found in owned lists, check the shared lists
+    if (!ownedList) {
+      // Check if the user has permissions for this list
+      const sharedPermission = await db.collection('list_permissions').findOne({
+        listId: new ObjectId(listId),
+        userId: userId,
+      });
+
+      if (!sharedPermission) {
+        return NextResponse.json(
+          { error: 'List not found or access denied' },
+          { status: 404 }
+        );
+      }
+
+      // If shared permissions are found, fetch the list
+      const sharedList = await db.collection('lists').findOne({
+        _id: new ObjectId(listId),
+      });
+
+      if (!sharedList) {
+        return NextResponse.json(
+          { error: 'List not found or access denied' },
+          { status: 404 }
+        );
+      }
+
+      // Return the list with the permission level
+      return NextResponse.json({
+        ...sharedList,
+        isOwner: false,
+        canEdit: sharedPermission.permission_level === 'edit', // Add canEdit flag based on permissions
+      });
     }
 
-    return NextResponse.json(list);
+    // If the user is the owner, return the list with isOwner = true
+    return NextResponse.json({
+      ...ownedList,
+      isOwner: true,
+      canEdit: true, // Owner can always edit
+    });
   } catch (error) {
     console.error('Error fetching list:', error);
     return NextResponse.json(
@@ -60,6 +94,7 @@ export async function POST(request: NextRequest) {
     const client = await clientPromise;
     const db = client.db('lista-app');
 
+    // Check if the user is either the owner or has 'edit' permissions
     const list = await db.collection('lists').findOne({
       _id: new ObjectId(listId),
       $or: [

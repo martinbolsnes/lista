@@ -1,5 +1,6 @@
 'use client';
 
+import type React from 'react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,8 @@ interface Item {
 interface List {
   _id: string;
   name: string;
+  isOwner: boolean;
+  canEdit: boolean; // Add a flag for edit permission
 }
 
 export default function InteractiveListComponent({
@@ -152,7 +155,7 @@ export default function InteractiveListComponent({
   if (!isSignedIn) {
     return (
       <div className='flex justify-center items-center mx-auto'>
-        <p className='font-serif'>Logg inn for å se dine lister</p>
+        <p className='font-sans'>Logg inn for å se dine lister</p>
       </div>
     );
   }
@@ -162,24 +165,34 @@ export default function InteractiveListComponent({
       {loadingListName ? (
         <Skeleton className='h-4 w-[200px]' />
       ) : (
-        <Badge className='font-sans text-lg bg-secondary/40'>
-          {listName?.name}
-        </Badge>
+        <>
+          <Badge className='font-sans text-lg bg-secondary/40'>
+            {listName?.name}
+          </Badge>
+          {!listName?.isOwner && (
+            <Badge variant='secondary' className='ml-2'>
+              Delt liste
+            </Badge>
+          )}
+        </>
       )}
 
-      <form onSubmit={addItem} className='flex space-x-2'>
-        <Input
-          type='text'
-          value={newItem}
-          onChange={(e) => setNewItem(e.target.value)}
-          placeholder='Ny ting'
-          className='flex-grow text-base font-serif'
-          required
-        />
-        <Button className='font-serif' type='submit' disabled={addingItem}>
-          {addingItem ? <LoadingSpinner /> : 'Legg til'}
-        </Button>
-      </form>
+      {/* Show the form if the user is the owner or has 'edit' permission */}
+      {(listName?.isOwner || listName?.canEdit) && (
+        <form onSubmit={addItem} className='flex space-x-2'>
+          <Input
+            type='text'
+            value={newItem}
+            onChange={(e) => setNewItem(e.target.value)}
+            placeholder='Ny ting'
+            className='flex-grow text-base font-sans'
+            required
+          />
+          <Button className='font-sans' type='submit' disabled={addingItem}>
+            {addingItem ? <LoadingSpinner /> : 'Legg til'}
+          </Button>
+        </form>
+      )}
 
       {loadingItems ? (
         <LoadingSpinner />
@@ -208,15 +221,17 @@ export default function InteractiveListComponent({
                   {item.content}
                 </label>
               </div>
-              <Button
-                type='button'
-                variant='outline'
-                size='icon'
-                className='h-8 w-8'
-                onClick={() => deleteItem(item._id)}
-              >
-                <Plus className='rotate-45' />
-              </Button>
+              {listName?.isOwner && (
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='icon'
+                  className='h-8 w-8'
+                  onClick={() => deleteItem(item._id)}
+                >
+                  <Plus className='rotate-45' />
+                </Button>
+              )}
             </li>
           ))}
         </ul>
