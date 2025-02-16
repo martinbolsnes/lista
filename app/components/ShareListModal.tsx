@@ -44,6 +44,7 @@ export function ShareListModal({
       setEmail('');
     } catch (error) {
       toast({ title: 'Feil', description: 'Kunne ikke dele listen' });
+      throw new Error(`${error}`);
     } finally {
       setLoading(false);
     }
