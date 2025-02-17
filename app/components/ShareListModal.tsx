@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,18 +55,29 @@ export function ShareListModal({
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Del liste</DialogTitle>
+          <DialogTitle className='font-sans'>Del liste</DialogTitle>
+          <DialogDescription className='font-sans'>
+            Brukeren du vil invitere må ha sin epost registrert
+          </DialogDescription>
         </DialogHeader>
         <Input
           placeholder='Brukerens e-post'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <DialogFooter>
-          <Button variant='outline' onClick={() => setOpen(false)}>
+        <DialogFooter className='flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-x-2 sm:space-y-0'>
+          <Button
+            variant='outline'
+            className='font-sans'
+            onClick={() => setOpen(false)}
+          >
             Avbryt
           </Button>
-          <Button onClick={handleShare} disabled={loading}>
+          <Button
+            className='font-sans'
+            onClick={handleShare}
+            disabled={loading}
+          >
             {loading ? <LoadingSpinner /> : 'Del'}
           </Button>
         </DialogFooter>
