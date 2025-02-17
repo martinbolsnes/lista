@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -11,6 +11,7 @@ import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@clerk/nextjs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import pusherClient from '@/lib/pusher';
 
 interface Item {
   _id: string;
@@ -22,7 +23,7 @@ interface List {
   _id: string;
   name: string;
   isOwner: boolean;
-  canEdit: boolean; // Add a flag for edit permission
+  canEdit: boolean;
 }
 
 export default function InteractiveListComponent({
@@ -38,27 +39,7 @@ export default function InteractiveListComponent({
   const [addingItem, setAddingItem] = useState(false);
   const { isLoaded, isSignedIn } = useAuth();
 
-  useEffect(() => {
-    fetchListName();
-    fetchItems();
-  }, [listId]);
-
-  const fetchListName = async () => {
-    setLoadingListName(true);
-    try {
-      const response = await fetch(`/api/lists/${listId}`);
-      if (!response.ok) throw new Error('Failed to fetch list name');
-      const data = await response.json();
-      setListName(data);
-    } catch (error) {
-      toast({ title: 'Feil', description: 'Kunne ikke hente navn på liste' });
-      throw new Error(`${error}`);
-    } finally {
-      setLoadingListName(false);
-    }
-  };
-
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     setLoadingItems(true);
     try {
       const response = await fetch(`/api/lists/${listId}/items`);
@@ -72,7 +53,54 @@ export default function InteractiveListComponent({
     } finally {
       setLoadingItems(false);
     }
-  };
+  }, [listId]);
+
+  useEffect(() => {
+    const fetchListName = async () => {
+      setLoadingListName(true);
+      try {
+        const response = await fetch(`/api/lists/${listId}`);
+        if (!response.ok) throw new Error('Failed to fetch list name');
+        const data = await response.json();
+        setListName(data);
+      } catch (error) {
+        toast({ title: 'Feil', description: 'Kunne ikke hente navn på liste' });
+        throw new Error(`${error}`);
+      } finally {
+        setLoadingListName(false);
+      }
+    };
+
+    fetchListName();
+    fetchItems();
+
+    const channel = pusherClient.subscribe(`list-${listId}`);
+
+    channel.bind('pusher:subscription_succeeded', () => {});
+
+    channel.bind('item-added', (newItem: Item) => {
+      setItems((prevItems) => [newItem, ...prevItems]);
+    });
+
+    channel.bind(
+      'item-updated',
+      ({ itemId, completed }: { itemId: string; completed: boolean }) => {
+        setItems((prevItems) =>
+          prevItems.map((item) =>
+            item._id === itemId ? { ...item, completed } : item
+          )
+        );
+      }
+    );
+
+    channel.bind('item-deleted', ({ itemId }: { itemId: string }) => {
+      setItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
+    });
+
+    return () => {
+      pusherClient.unsubscribe(`list-${listId}`);
+    };
+  }, [listId]);
 
   const addItem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,19 +193,19 @@ export default function InteractiveListComponent({
       {loadingListName ? (
         <Skeleton className='h-4 w-[200px]' />
       ) : (
-        <>
-          <Badge className='font-sans text-lg bg-secondary/40'>
-            {listName?.name}
-          </Badge>
+        <div className='flex items-baseline space-x-2'>
+          <h2 className='font-sans text-xl'>{listName?.name}</h2>
           {!listName?.isOwner && (
-            <Badge variant='secondary' className='ml-2'>
+            <Badge
+              variant='secondary'
+              className='ml-2 font-sans text-xs bg-secondary/40'
+            >
               Delt liste
             </Badge>
           )}
-        </>
+        </div>
       )}
 
-      {/* Show the form if the user is the owner or has 'edit' permission */}
       {(listName?.isOwner || listName?.canEdit) && (
         <form onSubmit={addItem} className='flex space-x-2'>
           <Input

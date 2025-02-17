@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@clerk/nextjs/server';
+import pusherServer from '@/lib/pusher-server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +11,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Extract listId from URL
     const segments = request.nextUrl.pathname.split('/');
     const listId = segments[segments.length - 2];
     if (!listId) {
@@ -71,9 +71,17 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
     });
 
-    console.log('Inserted item:', result);
+    const newItem = {
+      _id: result.insertedId,
+      listId: new ObjectId(listId),
+      content,
+      completed: false,
+      createdAt: new Date(),
+    };
 
-    return NextResponse.json({ itemId: result.insertedId }, { status: 201 });
+    await pusherServer.trigger(`list-${listId}`, 'item-added', newItem);
+
+    return NextResponse.json(newItem, { status: 201 });
   } catch (error) {
     console.error('Error adding item:', error);
     return NextResponse.json(
@@ -108,6 +116,11 @@ export async function PUT(request: NextRequest) {
         { $set: { completed } }
       );
 
+    await pusherServer.trigger(`list-${listId}`, 'item-updated', {
+      itemId,
+      completed,
+    });
+
     return NextResponse.json({ message: 'Item updated successfully' });
   } catch (error) {
     console.error('Error updating item:', error);
@@ -125,7 +138,6 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Extract listId from URL
     const segments = request.nextUrl.pathname.split('/');
     const listId = segments[segments.length - 2];
     if (!listId) {
@@ -140,6 +152,8 @@ export async function DELETE(request: NextRequest) {
       _id: new ObjectId(itemId),
       listId: new ObjectId(listId),
     });
+
+    await pusherServer.trigger(`list-${listId}`, 'item-deleted', { itemId });
 
     return NextResponse.json({ message: 'Item deleted successfully' });
   } catch (error) {
