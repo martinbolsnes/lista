@@ -136,6 +136,9 @@ export default function Dashboard() {
     }
   };
 
+  const ownedLists = lists.filter((list) => list.isOwner);
+  const sharedLists = lists.filter((list) => !list.isOwner);
+
   if (!isLoaded) {
     return (
       <div className='flex justify-center items-center mx-auto'>
@@ -177,11 +180,10 @@ export default function Dashboard() {
         <LoadingSpinner />
       ) : (
         <div className='flex flex-col space-y-4'>
-          <div>
-            <h3 className='font-sans text-lg mb-2'>Dine lister</h3>
-            {lists
-              .filter((list) => list.isOwner)
-              .map((list) => (
+          {ownedLists.length > 0 && (
+            <div>
+              <h3 className='font-sans text-lg mb-2'>Dine lister</h3>
+              {ownedLists.map((list) => (
                 <Card
                   key={list._id}
                   className='flex justify-between items-center px-2 mb-2'
@@ -234,12 +236,12 @@ export default function Dashboard() {
                   </div>
                 </Card>
               ))}
-          </div>
-          {lists
-            .filter((list) => !list.isOwner)
-            .map((list) => (
-              <div>
-                <h3 className='font-sans text-lg mb-2'>Delt med deg</h3>
+            </div>
+          )}
+          {sharedLists.length > 0 && (
+            <div>
+              <h3 className='font-sans text-lg mb-2'>Delt med deg</h3>
+              {sharedLists.map((list) => (
                 <Card
                   key={list._id}
                   className='flex justify-between items-center px-2 mb-2'
@@ -249,7 +251,7 @@ export default function Dashboard() {
                       <CardTitle className='font-sans text-lg'>
                         {list.name}
                       </CardTitle>
-                      {list.isShared && list.sharedBy && (
+                      {/* {list.isShared && list.sharedBy && (
                         <div className='flex items-center space-x-2 mt-1 text-sm text-gray-500'>
                           {list.sharedBy.profileImage && (
                             <img
@@ -264,12 +266,13 @@ export default function Dashboard() {
                             {list.sharedBy.name}
                           </span>
                         </div>
-                      )}
+                      )} */}
                     </CardHeader>
                   </Link>
                 </Card>
-              </div>
-            ))}
+              ))}
+            </div>
+          )}
         </div>
       )}
       {selectedShareList && (
