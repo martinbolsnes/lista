@@ -1,17 +1,12 @@
-import Pusher from 'pusher';
-import PusherClient from 'pusher-js';
+import Pusher from 'pusher-js';
 
-export const pusher = new Pusher({
-  appId: process.env.PUSHER_APP_ID!,
-  key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
-  secret: process.env.PUSHER_SECRET!,
+const pusherClient = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
   cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-  useTLS: true,
 });
 
-export const pusherClient = new PusherClient(
-  process.env.NEXT_PUBLIC_PUSHER_KEY!,
-  {
-    cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-  }
-);
+// Add logging for connection state changes
+pusherClient.connection.bind('state_change', (states: { current: string }) => {
+  console.log('Pusher connection state changed:', states.current);
+});
+
+export default pusherClient;
