@@ -235,11 +235,11 @@ export default function Dashboard() {
                 </Card>
               ))}
           </div>
-          <div>
-            <h3 className='font-sans text-lg mb-2'>Delt med deg</h3>
-            {lists
-              .filter((list) => !list.isOwner)
-              .map((list) => (
+          {lists
+            .filter((list) => !list.isOwner)
+            .map((list) => (
+              <div>
+                <h3 className='font-sans text-lg mb-2'>Delt med deg</h3>
                 <Card
                   key={list._id}
                   className='flex justify-between items-center px-2 mb-2'
@@ -268,8 +268,8 @@ export default function Dashboard() {
                     </CardHeader>
                   </Link>
                 </Card>
-              ))}
-          </div>
+              </div>
+            ))}
         </div>
       )}
       {selectedShareList && (
