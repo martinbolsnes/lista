@@ -48,7 +48,11 @@ export default function InteractiveListComponent({
       const data = await response.json();
       setItems(data);
     } catch (error) {
-      toast({ title: 'Feil', description: 'Kunne ikke hente innhold i liste' });
+      toast({
+        title: 'Feil',
+        description: 'Kunne ikke hente innhold i liste',
+        variant: 'destructive',
+      });
       throw new Error(`${error}`);
     } finally {
       setLoadingItems(false);
@@ -64,7 +68,11 @@ export default function InteractiveListComponent({
         const data = await response.json();
         setListName(data);
       } catch (error) {
-        toast({ title: 'Feil', description: 'Kunne ikke hente navn på liste' });
+        toast({
+          title: 'Feil',
+          description: 'Kunne ikke hente navn på liste',
+          variant: 'destructive',
+        });
         throw new Error(`${error}`);
       } finally {
         setLoadingListName(false);
@@ -122,7 +130,11 @@ export default function InteractiveListComponent({
       ]);
       setNewItem('');
     } catch (error) {
-      toast({ title: 'Feil', description: 'Kunne ikke legge til innhold' });
+      toast({
+        title: 'Feil',
+        description: 'Kunne ikke legge til innhold',
+        variant: 'destructive',
+      });
       throw new Error(`${error}`);
     } finally {
       setAddingItem(false);
@@ -148,6 +160,7 @@ export default function InteractiveListComponent({
       toast({
         title: 'Feil',
         description: 'Kunne ikke oppdatere innhold',
+        variant: 'destructive',
       });
       throw new Error(`${error}`);
     }
@@ -167,6 +180,7 @@ export default function InteractiveListComponent({
       toast({
         title: 'Feil',
         description: 'Kunne ikke slette innhold',
+        variant: 'destructive',
       });
       throw new Error(`${error}`);
     }
@@ -249,7 +263,7 @@ export default function InteractiveListComponent({
                   {item.content}
                 </label>
               </div>
-              {listName?.isOwner && (
+              {(listName?.isOwner || listName?.canEdit) && (
                 <Button
                   type='button'
                   variant='outline'
