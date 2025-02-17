@@ -267,16 +267,6 @@ export default function Dashboard() {
                       )}
                     </CardHeader>
                   </Link>
-                  <div className='flex space-x-2'>
-                    <Button
-                      className='font-sans border border-border'
-                      variant='outline'
-                      size='icon'
-                      onClick={() => handleDeleteClick(list)}
-                    >
-                      <Trash color='#DB3939' />
-                    </Button>
-                  </div>
                 </Card>
               ))}
           </div>
