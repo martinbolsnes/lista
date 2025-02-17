@@ -19,8 +19,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
 import { ShareListModal } from './ShareListModal';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface List {
   _id: string;
@@ -66,7 +66,11 @@ export default function Dashboard() {
         }))
       );
     } catch (error) {
-      toast({ title: 'Feil', description: 'Klarte ikke hente listene' });
+      toast({
+        title: 'Feil',
+        description: 'Klarte ikke hente listene',
+        variant: 'destructive',
+      });
       throw new Error(`${error}`);
     } finally {
       setLoadingLists(false);
@@ -89,7 +93,11 @@ export default function Dashboard() {
       setNewListName('');
       fetchLists();
     } catch (error) {
-      toast({ title: 'Feil', description: 'Klarte ikke opprette listen' });
+      toast({
+        title: 'Feil',
+        description: 'Klarte ikke opprette listen',
+        variant: 'destructive',
+      });
       throw new Error(`${error}`);
     } finally {
       setCreatingList(false);
@@ -116,7 +124,11 @@ export default function Dashboard() {
       );
       toast({ title: 'Slettet', description: 'Listen ble slettet' });
     } catch (error) {
-      toast({ title: 'Feil', description: 'Klarte ikke slette listen' });
+      toast({
+        title: 'Feil',
+        description: 'Klarte ikke slette listen',
+        variant: 'destructive',
+      });
       throw new Error(`${error}`);
     } finally {
       setDialogOpen(false);
@@ -142,8 +154,11 @@ export default function Dashboard() {
 
   return (
     <div className='space-y-6'>
-      <Badge className='font-sans text-lg bg-secondary/40'>Dine lister</Badge>
-
+      {loadingLists ? (
+        <Skeleton className='h-4 w-[200px]' />
+      ) : lists.length === 0 ? (
+        <h2 className='font-sans text-lg'>Legg til din første liste</h2>
+      ) : null}
       <form onSubmit={createNewList} className='flex space-x-2'>
         <Input
           type='text'
@@ -163,9 +178,7 @@ export default function Dashboard() {
       ) : (
         <div className='flex flex-col space-y-4'>
           <div>
-            <Badge className='font-sans text-lg bg-secondary/40 mb-2'>
-              Dine lister
-            </Badge>
+            <h3 className='font-sans text-lg mb-2'>Dine lister</h3>
             {lists
               .filter((list) => list.isOwner)
               .map((list) => (
@@ -199,7 +212,8 @@ export default function Dashboard() {
                   <div className='flex space-x-2'>
                     {list.isOwner && (
                       <Button
-                        variant='ghost'
+                        className='border border-border'
+                        variant='outline'
                         size='icon'
                         onClick={() => {
                           setSelectedShareList(list._id);
@@ -210,21 +224,19 @@ export default function Dashboard() {
                       </Button>
                     )}
                     <Button
-                      className='font-sans'
-                      variant='destructive'
+                      className='font-sans border border-border'
+                      variant='outline'
                       size='icon'
                       onClick={() => handleDeleteClick(list)}
                     >
-                      <Trash />
+                      <Trash color='#DB3939' />
                     </Button>
                   </div>
                 </Card>
               ))}
           </div>
           <div>
-            <Badge className='font-sans text-lg bg-secondary/40 mb-2'>
-              Delt med deg
-            </Badge>
+            <h3 className='font-sans text-lg mb-2'>Delt med deg</h3>
             {lists
               .filter((list) => !list.isOwner)
               .map((list) => (
@@ -257,12 +269,12 @@ export default function Dashboard() {
                   </Link>
                   <div className='flex space-x-2'>
                     <Button
-                      className='font-sans'
-                      variant='destructive'
+                      className='font-sans border border-border'
+                      variant='outline'
                       size='icon'
                       onClick={() => handleDeleteClick(list)}
                     >
-                      <Trash />
+                      <Trash color='#DB3939' />
                     </Button>
                   </div>
                 </Card>
