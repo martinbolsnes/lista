@@ -191,7 +191,7 @@ export default function Dashboard() {
                       <CardTitle className='font-sans text-lg'>
                         {list.name}
                       </CardTitle>
-                      {list.isShared && list.sharedBy && (
+                      {/* {list.isShared && list.sharedBy && (
                         <div className='flex items-center space-x-2 mt-1 text-sm text-gray-500'>
                           {list.sharedBy.profileImage && (
                             <img
@@ -206,7 +206,7 @@ export default function Dashboard() {
                             {list.sharedBy.name}
                           </span>
                         </div>
-                      )}
+                      )} */}
                     </CardHeader>
                   </Link>
                   <div className='flex space-x-2'>
