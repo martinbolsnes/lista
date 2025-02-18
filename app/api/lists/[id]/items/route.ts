@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       .toArray();
 
     return NextResponse.json(items);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while fetching items' },
       { status: 500 }
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     await pusherServer.trigger(`list-${listId}`, 'item-added', newItem);
 
     return NextResponse.json(newItem, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while adding the item' },
       { status: 500 }
@@ -118,7 +118,7 @@ export async function PUT(request: NextRequest) {
     });
 
     return NextResponse.json({ message: 'Item updated successfully' });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while updating the item' },
       { status: 500 }
@@ -151,7 +151,7 @@ export async function DELETE(request: NextRequest) {
     await pusherServer.trigger(`list-${listId}`, 'item-deleted', { itemId });
 
     return NextResponse.json({ message: 'Item deleted successfully' });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while deleting the item' },
       { status: 500 }

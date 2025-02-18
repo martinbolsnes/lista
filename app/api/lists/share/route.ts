@@ -77,8 +77,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ message: 'List shared successfully' });
-  } catch (error) {
-    console.error('Error in share route:', error);
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while sharing the list' },
       { status: 500 }

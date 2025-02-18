@@ -37,7 +37,7 @@ export async function GET() {
     ];
 
     return NextResponse.json(combinedLists);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while fetching lists' },
       { status: 500 }
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ listId: result.insertedId }, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while creating the list' },
       { status: 500 }

@@ -62,7 +62,7 @@ export async function GET(
       isOwner: true,
       canEdit: true,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while fetching the list' },
       { status: 500 }
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ itemId: result.insertedId }, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while adding the item' },
       { status: 500 }
@@ -146,7 +146,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'An error occurred while deleting the list' },
       { status: 500 }
