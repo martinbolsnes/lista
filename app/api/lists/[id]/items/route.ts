@@ -28,7 +28,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(items);
   } catch (error) {
-    console.error('Error fetching items:', error);
     return NextResponse.json(
       { error: 'An error occurred while fetching items' },
       { status: 500 }
@@ -45,7 +44,6 @@ export async function POST(request: NextRequest) {
 
     const segments = request.nextUrl.pathname.split('/');
     const listId = segments[segments.length - 2];
-    console.log('POST /api/lists/[listId]/items - listId:', listId);
 
     if (!listId || !ObjectId.isValid(listId)) {
       return NextResponse.json({ error: 'Invalid list ID' }, { status: 400 });
@@ -83,7 +81,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(newItem, { status: 201 });
   } catch (error) {
-    console.error('Error adding item:', error);
     return NextResponse.json(
       { error: 'An error occurred while adding the item' },
       { status: 500 }
@@ -98,7 +95,6 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Extract listId from URL
     const segments = request.nextUrl.pathname.split('/');
     const listId = segments[segments.length - 2];
     if (!listId) {
@@ -123,7 +119,6 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ message: 'Item updated successfully' });
   } catch (error) {
-    console.error('Error updating item:', error);
     return NextResponse.json(
       { error: 'An error occurred while updating the item' },
       { status: 500 }
@@ -157,7 +152,6 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ message: 'Item deleted successfully' });
   } catch (error) {
-    console.error('Error deleting item:', error);
     return NextResponse.json(
       { error: 'An error occurred while deleting the item' },
       { status: 500 }

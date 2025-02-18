@@ -25,10 +25,12 @@ export default function Home() {
           });
 
           if (!response.ok) {
-            console.error('Error saving user data to the database.');
+            throw new Error(
+              `Error saving user data to the database: ${response}`
+            );
           }
         } catch (error) {
-          console.error('Failed to save user:', error);
+          throw new Error(`Failed to save user: ${error}`);
         }
       };
 
