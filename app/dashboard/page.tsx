@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import Dashboard from '../components/Dashboard';
+
+export const metadata: Metadata = {
+  title: 'LISTA - Dine lister',
+  description: 'Oversikt over dine lister',
+};
 
 export default function DashboardPage() {
   return (

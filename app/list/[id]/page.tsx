@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import InteractiveListComponent from '../../components/InteractiveListComponent';
+
+export const metadata: Metadata = {
+  title: 'LISTA - Dine liste',
+  description: 'Legg til, oppdater og slett ting i din liste',
+};
 
 export default function ListPage({ params }: { params: { id: string } }) {
   return (
