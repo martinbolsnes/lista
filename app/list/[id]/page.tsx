@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import InteractiveListComponent from '../../components/InteractiveListComponent';
 
 export const metadata: Metadata = {
-  title: 'LISTA - Dine liste',
+  title: 'LISTA - Dine lister',
   description: 'Legg til, oppdater og slett ting i din liste',
 };
 
