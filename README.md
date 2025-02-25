@@ -33,7 +33,7 @@ Before you begin, ensure you have the following installed:
 
 Create a \`.env.local\` file in the root directory and add the following variables:
 
-\`\`\`
+```bash
 MONGODB_URI=your_mongodb_connection_string
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
 CLERK_SECRET_KEY=your_cler_secret
@@ -41,35 +41,35 @@ NEXT_PUBLIC_PUSHER_KEY=your_pusher_key
 NEXT_PUBLIC_PUSHER_CLUSTER=your_pusher_cluster
 PUSHER_APP_ID=your_pusher_app_id
 PUSHER_SECRET=your_pusher_secret
-\`\`\`
+```
 
 Replace the placeholder values with your actual credentials.
 
 ## Installation
 
 1. Clone the repository:
-   \`\`\`
+   ```bash
    git clone https://github.com/yourusername/lista.git
    cd lista
-   \`\`\`
+   ```
 
 2. Install dependencies:
-   \`\`\`
+   ```bash
    npm install
-   \`\`\`
+   
    or
-   \`\`\`
+   
    yarn install
-   \`\`\`
+   ```
 
 3. Run the development server:
-   \`\`\`
+   ```bash
    npm run dev
-   \`\`\`
+   
    or
-   \`\`\`
+   
    yarn dev
-   \`\`\`
+   ```
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
