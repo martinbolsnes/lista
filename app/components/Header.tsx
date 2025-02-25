@@ -16,7 +16,7 @@ import { currentUser } from '@clerk/nextjs/server';
 export default async function Header() {
   const user = await currentUser();
   return (
-    <div className='bg-bw border-b-4 border-border px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-10'>
+    <nav className='bg-bw border-b-4 border-border px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-10'>
       <Link href='/'>
         <h1 className='font-mono text-3xl text-background'>LISTA</h1>
       </Link>
@@ -85,6 +85,6 @@ export default async function Header() {
           </SheetContent>
         </Sheet>
       </div>
-    </div>
+    </nav>
   );
 }
