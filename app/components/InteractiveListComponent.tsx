@@ -208,12 +208,9 @@ export default function InteractiveListComponent({
         <Skeleton className='h-4 w-[200px]' />
       ) : (
         <div className='flex items-baseline space-x-2'>
-          <h2 className='font-sans text-xl'>{listName?.name}</h2>
+          <h2 className='font-sans font-semibold text-xl'>{listName?.name}</h2>
           {!listName?.isOwner && (
-            <Badge
-              variant='secondary'
-              className='ml-2 font-sans text-xs bg-secondary/40'
-            >
+            <Badge variant='neutral' className='ml-2 font-sans text-xs bg-bw'>
               Delt liste
             </Badge>
           )}
@@ -248,7 +245,7 @@ export default function InteractiveListComponent({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id={item._id}
-                  className='h-7 w-7'
+                  className='h-7 w-7 rounded-md bg-bw'
                   checked={item.completed}
                   onCheckedChange={(checked) =>
                     toggleItem(item._id, checked === true)
@@ -266,7 +263,7 @@ export default function InteractiveListComponent({
               {(listName?.isOwner || listName?.canEdit) && (
                 <Button
                   type='button'
-                  variant='outline'
+                  variant='neutral'
                   size='icon'
                   className='h-8 w-8'
                   onClick={() => deleteItem(item._id)}

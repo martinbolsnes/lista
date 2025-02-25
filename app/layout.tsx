@@ -30,7 +30,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang='en'>
-        <body className={`${shrikhand.variable} ${fira.variable} antialiased`}>
+        <body
+          className={`${shrikhand.variable} ${fira.variable} antialiased bg-bg`}
+        >
           <Header />
           {children}
           <Toaster />

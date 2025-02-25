@@ -67,7 +67,7 @@ export function ShareListModal({
         />
         <DialogFooter className='flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-x-2 sm:space-y-0'>
           <Button
-            variant='outline'
+            variant='neutral'
             className='font-sans'
             onClick={() => setOpen(false)}
           >

@@ -156,7 +156,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-4'>
       {loadingLists ? (
         <Skeleton className='h-4 w-[200px]' />
       ) : lists.length === 0 ? (
@@ -171,7 +171,7 @@ export default function Dashboard() {
           className='text-base font-sans'
           required
         />
-        <Button variant='secondary' type='submit' disabled={creatingList}>
+        <Button variant='default' type='submit' disabled={creatingList}>
           {creatingList ? <LoadingSpinner /> : <Plus />}
         </Button>
       </form>
@@ -181,16 +181,16 @@ export default function Dashboard() {
       ) : (
         <div className='flex flex-col space-y-4'>
           {ownedLists.length > 0 && (
-            <div>
+            <div className='space-y-4'>
               <h3 className='font-sans text-lg mb-2'>Dine lister</h3>
               {ownedLists.map((list) => (
                 <Card
                   key={list._id}
-                  className='flex justify-between items-center px-2 mb-2'
+                  className='bg-bw flex justify-between items-center px-2 mb-2'
                 >
                   <Link href={`/list/${list._id}`} className='flex-grow'>
                     <CardHeader>
-                      <CardTitle className='font-sans text-lg'>
+                      <CardTitle className='font-sans font-semibold text-lg'>
                         {list.name}
                       </CardTitle>
                       {/* {list.isShared && list.sharedBy && (
@@ -214,8 +214,8 @@ export default function Dashboard() {
                   <div className='flex space-x-2'>
                     {list.isOwner && (
                       <Button
-                        className='border border-border'
-                        variant='outline'
+                        className='border border-border bg-bw'
+                        variant='noShadow'
                         size='icon'
                         onClick={() => {
                           setSelectedShareList(list._id);
@@ -226,8 +226,8 @@ export default function Dashboard() {
                       </Button>
                     )}
                     <Button
-                      className='font-sans border border-border'
-                      variant='outline'
+                      className='font-sans border border-border bg-bw'
+                      variant='noShadow'
                       size='icon'
                       onClick={() => handleDeleteClick(list)}
                     >
@@ -239,16 +239,16 @@ export default function Dashboard() {
             </div>
           )}
           {sharedLists.length > 0 && (
-            <div>
+            <div className='space-y-4'>
               <h3 className='font-sans text-lg mb-2'>Delt med deg</h3>
               {sharedLists.map((list) => (
                 <Card
                   key={list._id}
-                  className='flex justify-between items-center px-2 mb-2'
+                  className='bg-bw flex justify-between items-center px-2 mb-2'
                 >
                   <Link href={`/list/${list._id}`} className='flex-grow'>
                     <CardHeader>
-                      <CardTitle className='font-sans text-lg'>
+                      <CardTitle className='font-sans font-semibold text-lg'>
                         {list.name}
                       </CardTitle>
                       {/* {list.isShared && list.sharedBy && (
@@ -295,14 +295,14 @@ export default function Dashboard() {
           <DialogFooter className='flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-x-2 sm:space-y-0'>
             <Button
               className='font-sans'
-              variant='outline'
+              variant='neutral'
               onClick={() => setDialogOpen(false)}
             >
               Avbryt
             </Button>
             <Button
               className='font-sans'
-              variant='destructive'
+              variant='default'
               onClick={confirmDelete}
             >
               Slett

@@ -46,7 +46,7 @@ export default function Home() {
           Din eneste app for dine lister
         </p>
         <div className='flex flex-col space-y-4 mt-8 justify-items-center'>
-          <Card>
+          <Card className='bg-bw'>
             <CardTitle className='flex justify-items-center font-sans font-semibold text-lg p-6'>
               <FileText className='mr-2' />
               Flere lister på en plass
@@ -56,7 +56,7 @@ export default function Home() {
               i en og samme app
             </CardContent>
           </Card>
-          <Card>
+          <Card className='bg-bw'>
             <CardTitle className='flex justify-items-center font-sans font-semibold text-lg p-6'>
               <Users className='mr-2' />
               Del listene dine
@@ -67,7 +67,7 @@ export default function Home() {
             </CardContent>
           </Card>
           <SignInButton>
-            <Button className='w-full font-sans font-semibold'>
+            <Button className='w-full font-sans text-lg font-semibold'>
               Kom i gang
             </Button>
           </SignInButton>

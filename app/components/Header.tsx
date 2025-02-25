@@ -16,14 +16,14 @@ import { currentUser } from '@clerk/nextjs/server';
 export default async function Header() {
   const user = await currentUser();
   return (
-    <div className='bg-primary border-b border-border px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-10'>
+    <div className='bg-bw border-b-4 border-border px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-10'>
       <Link href='/'>
         <h1 className='font-mono text-3xl text-background'>LISTA</h1>
       </Link>
-      <div className='flex items-center space-x-2'>
+      <div className='flex items-center space-x-4'>
         <SignedOut>
           <SignInButton>
-            <Button variant='outline' size='sm'>
+            <Button variant='neutral' size='sm'>
               Logg inn
             </Button>
           </SignInButton>
@@ -33,11 +33,11 @@ export default async function Header() {
         </SignedIn>
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant='ghost'>
+            <Button variant='neutral' className='bg-main'>
               <Menu className={cn('w-6 h-6')} />
             </Button>
           </SheetTrigger>
-          <SheetContent className={cn('bg-background/95 border border-border')}>
+          <SheetContent className={cn('border border-border')}>
             <SheetHeader className={cn('flex text-left')}>
               <SheetTitle>
                 <Link href='/'>
@@ -57,7 +57,7 @@ export default async function Header() {
                 <>
                   <SheetTrigger asChild>
                     <SignInButton>
-                      <Button variant='ghost' className='font-semibold'>
+                      <Button variant='neutral' className='font-semibold'>
                         Logg inn
                       </Button>
                     </SignInButton>
@@ -67,14 +67,14 @@ export default async function Header() {
                 <>
                   <SheetTrigger asChild>
                     <Link href='/'>
-                      <Button variant='ghost' className='font-semibold'>
+                      <Button variant='neutral' className='font-semibold'>
                         Hjem
                       </Button>
                     </Link>
                   </SheetTrigger>
                   <SheetTrigger asChild>
                     <Link href='/dashboard'>
-                      <Button variant='ghost' className='font-semibold'>
+                      <Button variant='neutral' className='font-semibold'>
                         Dine lister
                       </Button>
                     </Link>
